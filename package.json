@@ -4,6 +4,7 @@
   "description": "Uma otimização para o problema clássico de timetabling utilizando algoritmo genético.",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/danielvfo/timetabling/issues"
   },
-  "homepage": "https://github.com/danielvfo/timetabling#readme"
+  "homepage": "https://github.com/danielvfo/timetabling#readme",
+  "dependencies": {
+    "shuffle-array": "^1.0.1"
+  }
 }
