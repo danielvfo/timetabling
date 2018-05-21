@@ -1,5 +1,4 @@
 const fs = require('fs');
-const shuffle = require('shuffle-array');
 
 module.exports = class FileLoader {
   // Abre e converte o arquivo .csv para um array de objetos JS
@@ -9,8 +8,9 @@ module.exports = class FileLoader {
     let arrayObject = [];
     switch (type) {
       case 'salas':
-        arrayObject = array.filter(sala => array.indexOf(sala) > 0 && sala).map(sala => {
-          return this.splitSala(sala);
+        arrayObject = array.filter(sala =>
+          array.indexOf(sala) > 0 && sala).map(sala => {
+            return this.splitSala(sala);
         });
         break;
       case 'professores':
@@ -20,12 +20,13 @@ module.exports = class FileLoader {
           });
         break;
       case 'materias':
-        arrayObject = array.filter(materia => array.indexOf(materia) > 0 && materia).map(materia => {
-          return this.splitMateria(materia);
+        arrayObject = array.filter(materia =>
+          array.indexOf(materia) > 0 && materia).map(materia => {
+            return this.splitMateria(materia);
         });
         break;
     }
-    return shuffle(arrayObject);
+    return arrayObject;
   }
 
   static splitSala(sala) {
