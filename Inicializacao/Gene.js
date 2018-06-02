@@ -1,5 +1,6 @@
 const FileLoader = require('./FileLoader');
 const shuffle = require('shuffle-array');
+
 const SALAS = 'salas';
 const PROFESSORES = 'professores';
 const MATERIAS = 'materias';
@@ -29,31 +30,31 @@ module.exports = class Gene {
   // Verificar quantidade de créditos
 
   // Remove um elemento especifico de um array
-  removerElemento(array, elemento) {
+  static removerElemento(array, elemento) {
     const indice = array.indexOf(elemento);
     if (indice > -1) {
       array.splice(indice, 1);
     }
     return array;
-  };
-
-  // Pega a primeira materia do array de materias
-  pegaMateria(materias) {
-    let materia = materias.filter(materia => materias.indexOf(materia) === 0);
-    return materia.pop();
   }
 
-  pegaMateriaComplementar(materia, materias) {
+  // Pega a primeira materia do array de materias
+  static pegaMateria(materias) {
+    const materiaEscolhida = materias.filter(materia => materias.indexOf(materia) === 0);
+    return materiaEscolhida.pop();
+  }
+
+  static pegaMateriaComplementar(materia, materias) {
     return materiaComplementar;
   }
 
-  pegaSalasDeAula(creditos, salasDeAula, DNA) {
+  static pegaSalasDeAula(creditos, salasDeAula, DNA) {
     return salasDeAula;
   }
 
-  //pegaProfessor(creditos, disciplina, professores, DNA) {
-  pegaProfessor(professores) {
-    let professor = professores.filter(professor => professores.indexOf(professor) === 0);
-    return professor.pop();
+  // pegaProfessor(creditos, disciplina, professores, DNA) {
+  static pegaProfessor(professores) {
+    const professorEscolhido = professores.filter(professor => professores.indexOf(professor) === 0);
+    return professorEscolhido.pop();
   }
-}
+};

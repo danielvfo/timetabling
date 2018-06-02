@@ -1,7 +1,8 @@
-let Gene = require('./Inicializacao/Gene');
-Gene = new Gene('./Inputs/');
+const Gene = require('./Inicializacao/Gene');
 
-let professores = Gene.getProfessores();
+const instanceofGene = new Gene('./Inputs/');
+
+let professores = instanceofGene.getProfessores();
 console.log(professores);
 const professor = Gene.pegaProfessor(professores);
 console.log('-------------------------------------');

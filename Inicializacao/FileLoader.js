@@ -9,22 +9,18 @@ module.exports = class FileLoader {
     switch (type) {
       case 'salas':
         arrayObject = array.filter(sala =>
-          array.indexOf(sala) > 0 && sala).map(sala => {
-            return this.splitSala(sala);
-        });
+          array.indexOf(sala) > 0 && sala).map(sala => this.splitSala(sala));
         break;
       case 'professores':
         arrayObject = array.filter(professor =>
-          array.indexOf(professor) > 0 && professor).map(professor => {
-            return this.splitProfessor(professor);
-          });
+          array.indexOf(professor) > 0 && professor).map(professor =>
+          this.splitProfessor(professor));
         break;
       case 'materias':
         arrayObject = array.filter(materia =>
-          array.indexOf(materia) > 0 && materia).map(materia => {
-            return this.splitMateria(materia);
-        });
+          array.indexOf(materia) > 0 && materia).map(materia => this.splitMateria(materia));
         break;
+      default:
     }
     return arrayObject;
   }
@@ -37,8 +33,8 @@ module.exports = class FileLoader {
       janela: temp[2],
       lab: temp[3],
       tipoLab: temp[4],
-      diaSemana: temp[5]
-    }
+      diaSemana: temp[5],
+    };
   }
 
   static splitProfessor(professor) {
@@ -51,8 +47,8 @@ module.exports = class FileLoader {
       id: temp[0],
       professor: temp[1],
       creditos: temp[2],
-      materias: materias
-    }
+      materias,
+    };
   }
 
   static splitMateria(materia) {
@@ -66,7 +62,7 @@ module.exports = class FileLoader {
       lab: temp[5],
       creditos: temp[6],
       tipoLab: temp[7],
-      turno: temp[8]
-    }
+      turno: temp[8],
+    };
   }
-}
+};
