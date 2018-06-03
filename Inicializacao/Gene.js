@@ -40,21 +40,25 @@ module.exports = class Gene {
 
   // Pega a primeira materia do array de materias
   static pegaMateria(materias) {
-    const materiaEscolhida = materias.filter(materia => materias.indexOf(materia) === 0);
+    const materiaEscolhida = materias.filter((materia, index) => index === 0);
     return materiaEscolhida.pop();
   }
 
   static pegaMateriaComplementar(materia, materias) {
-    return materiaComplementar;
+    const materiaComplementar = materias.filter(item =>
+      item.materia === materia.materia && item.curso === materia.curso &&
+      item.semestre === materia.semestre && item.id !== materia.id);
+    return materiaComplementar.pop();
   }
 
-  static pegaSalasDeAula(creditos, salasDeAula, DNA) {
+  static pegaSalasDeAula(creditos, salasDeAula) {
     return salasDeAula;
   }
 
   // pegaProfessor(creditos, disciplina, professores, DNA) {
   static pegaProfessor(professores) {
-    const professorEscolhido = professores.filter(professor => professores.indexOf(professor) === 0);
+    const professorEscolhido = professores.filter(professor =>
+      professores.indexOf(professor) === 0);
     return professorEscolhido.pop();
   }
 };
