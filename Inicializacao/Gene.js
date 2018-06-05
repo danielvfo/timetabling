@@ -51,8 +51,43 @@ module.exports = class Gene {
     return materiaComplementar.pop();
   }
 
-  static pegaSalasDeAula(creditos, salasDeAula) {
-    return salasDeAula;
+  // Retorna um objeto no formato: {Sala1: [M1, M2, ...], Sala2: [T1, T2, ...]}
+  static reduzirSalasDeAula(salasDeAula) {
+    const salasDeAulaReduzidas = salasDeAula.reduce((salasJanela, sala) => {
+      if (sala.sala in salasJanela) {
+        salasJanela[sala.sala].push(sala.janela);
+      } else {
+        salasJanela[sala.sala] = [sala.janela];// eslint-disable-line no-param-reassign
+      }
+      return salasJanela;
+    }, {});
+    return salasDeAulaReduzidas;
+  }
+
+  // Verifica se o turno entre uma materia e uma sala de aula combinam
+  static turnoCombina(salasDeAula, materia) {
+    if ((materia.turno === 'I') && (salasDeAula.janela[0] === 'M')) {
+      return true;
+    }
+    if ((materia.turno === 'I') && (salasDeAula.janela[0] === 'T')) {
+      return true;
+    }
+    if ((materia.turno === 'M') && (salasDeAula.janela[0] === 'M')) {
+      return true;
+    }
+    if ((materia.turno === 'T') && (salasDeAula.janela[0] === 'T')) {
+      return true;
+    }
+    if ((materia.turno === 'N') && (salasDeAula.janela[0] === 'N')) {
+      return true;
+    }
+    return false;
+  }
+
+  static pegaSalaDeAula(sala, janela, salasDeAula) {
+    const salaDeAula = salasDeAula.filter(item =>
+      item.sala === sala && item.janela === janela);
+    return salaDeAula.pop();
   }
 
   // pegaProfessor(creditos, disciplina, professores, DNA) {

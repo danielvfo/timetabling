@@ -11,8 +11,13 @@ console.log('-------------------------------------');
 professores = Gene.removerElemento(professores, professor);
 console.log(professores); */
 
-const materias = novoGene.getMaterias();
+/* const materias = novoGene.getMaterias();
 const materia = Gene.pegaMateria(materias);
 const materiaComplementar = Gene.pegaMateriaComplementar(materia, materias);
 console.log(materia);
-console.log(materiaComplementar);
+console.log(materiaComplementar); */
+
+const salasDeAula = novoGene.getSalasDeAula();
+const salasDeAulaReduzidas = Gene.reduzirSalasDeAula(salasDeAula);
+console.log(Object.keys(salasDeAulaReduzidas));
+
