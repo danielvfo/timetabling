@@ -19,5 +19,5 @@ console.log(materiaComplementar); */
 
 const salasDeAula = novoGene.getSalasDeAula();
 const salasDeAulaReduzidas = Gene.reduzirSalasDeAula(salasDeAula);
-console.log(Object.keys(salasDeAulaReduzidas));
+console.log(salasDeAulaReduzidas);
 

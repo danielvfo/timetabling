@@ -51,15 +51,15 @@ module.exports = class Gene {
     return materiaComplementar.pop();
   }
 
-  // Retorna um objeto no formato: {Sala1: [M1, M2, ...], Sala2: [T1, T2, ...]}
+  // Retorna um objeto no formato: {Sala1: [1-2-M1-1-1, 1-2-M2-1-1, ...], Sala2: [...]}
   static reduzirSalasDeAula(salasDeAula) {
-    const salasDeAulaReduzidas = salasDeAula.reduce((salasJanela, sala) => {
-      if (sala.sala in salasJanela) {
-        salasJanela[sala.sala].push(sala.janela);
+    const salasDeAulaReduzidas = salasDeAula.reduce((salas, sala) => {
+      if (sala.sala in salas) {
+        salas[sala.sala].push(`${sala.id}-${sala.diaSemana}-${sala.janela}-${sala.lab}-${sala.tipoLab}`);
       } else {
-        salasJanela[sala.sala] = [sala.janela];// eslint-disable-line no-param-reassign
+        salas[sala.sala] = [`${sala.id}-${sala.diaSemana}-${sala.janela}-${sala.lab}-${sala.tipoLab}`];// eslint-disable-line no-param-reassign
       }
-      return salasJanela;
+      return salas;
     }, {});
     return salasDeAulaReduzidas;
   }
