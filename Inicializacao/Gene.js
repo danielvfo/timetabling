@@ -28,16 +28,6 @@ module.exports = class Gene {
   }
 
   // Verificar quantidade de créditos
-
-  // Remove um elemento especifico de um array
-  static removerElemento(array, elemento) {
-    const indice = array.indexOf(elemento);
-    if (indice > -1) {
-      array.splice(indice, 1);
-    }
-    return array;
-  }
-
   // Pega a primeira materia do array de materias
   static pegaMateria(materias) {
     const materiaEscolhida = materias.filter((materia, index) => index === 0);
@@ -55,9 +45,11 @@ module.exports = class Gene {
   static reduzirSalasDeAula(salasDeAula) {
     const salasDeAulaReduzidas = salasDeAula.reduce((salas, sala) => {
       if (sala.sala in salas) {
-        salas[sala.sala].push(`${sala.id}-${sala.diaSemana}-${sala.janela}-${sala.lab}-${sala.tipoLab}`);
+        salas[sala.sala]
+          .push(`${sala.id}-${sala.diaSemana}-${sala.janela}-${sala.lab}-${sala.tipoLab}`);
       } else {
-        salas[sala.sala] = [`${sala.id}-${sala.diaSemana}-${sala.janela}-${sala.lab}-${sala.tipoLab}`];// eslint-disable-line no-param-reassign
+        salas[sala.sala] = // eslint-disable-line no-param-reassign
+          [`${sala.id}-${sala.diaSemana}-${sala.janela}-${sala.lab}-${sala.tipoLab}`];
       }
       return salas;
     }, {});
@@ -65,23 +57,39 @@ module.exports = class Gene {
   }
 
   // Verifica se o turno entre uma materia e uma sala de aula combinam
-  static turnoCombina(salasDeAula, materia) {
-    if ((materia.turno === 'I') && (salasDeAula.janela[0] === 'M')) {
+  static turnoCombina(detalhesSala, materia) {
+    const splittedSala = detalhesSala.split('-'); // Sala1: [1-2-M1-1-1, 1-2-M2-1-1]
+    if ((materia.turno === 'I') && (splittedSala[2][0] === 'M')) {
       return true;
     }
-    if ((materia.turno === 'I') && (salasDeAula.janela[0] === 'T')) {
+    if ((materia.turno === 'I') && (splittedSala[2][0] === 'T')) {
       return true;
     }
-    if ((materia.turno === 'M') && (salasDeAula.janela[0] === 'M')) {
+    if ((materia.turno === 'M') && (splittedSala[2][0] === 'M')) {
       return true;
     }
-    if ((materia.turno === 'T') && (salasDeAula.janela[0] === 'T')) {
+    if ((materia.turno === 'T') && (splittedSala[2][0] === 'T')) {
       return true;
     }
-    if ((materia.turno === 'N') && (salasDeAula.janela[0] === 'N')) {
+    if ((materia.turno === 'N') && (splittedSala[2][0] === 'N')) {
       return true;
     }
     return false;
+  }
+
+  static contaCreditosNoPeriodo(sala, materia) {
+    const creditosDisponiveis = sala.reduce((total, detalhesSala) => {
+      // detalhesSala -> [1-2-M1-1-1]
+      if (this.turnoCombina(detalhesSala, materia)) {
+        return total + 1;
+      }
+      return total + 0;
+    }, 0);
+    return creditosDisponiveis;
+  }
+
+  static labCombina(detalhesSala, materia) {
+
   }
 
   static pegaSalaDeAula(sala, janela, salasDeAula) {
