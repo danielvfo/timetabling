@@ -58,26 +58,26 @@ module.exports = class Gene {
 
   // Verifica se o turno entre uma materia e uma sala de aula combinam
   static turnoCombina(detalhesSala, materia) {
-    const splittedSala = detalhesSala.split('-'); // Sala1: [1-2-M1-1-1, 1-2-M2-1-1]
-    if ((materia.turno === 'I') && (splittedSala[2][0] === 'M')) {
+    const splittedDetalhesSala = detalhesSala.split('-'); // Sala1: [1-2-M1-1-1, 1-2-M2-1-1]
+    if ((materia.turno === 'I') && (splittedDetalhesSala[2][0] === 'M')) {
       return true;
     }
-    if ((materia.turno === 'I') && (splittedSala[2][0] === 'T')) {
+    if ((materia.turno === 'I') && (splittedDetalhesSala[2][0] === 'T')) {
       return true;
     }
-    if ((materia.turno === 'M') && (splittedSala[2][0] === 'M')) {
+    if ((materia.turno === 'M') && (splittedDetalhesSala[2][0] === 'M')) {
       return true;
     }
-    if ((materia.turno === 'T') && (splittedSala[2][0] === 'T')) {
+    if ((materia.turno === 'T') && (splittedDetalhesSala[2][0] === 'T')) {
       return true;
     }
-    if ((materia.turno === 'N') && (splittedSala[2][0] === 'N')) {
+    if ((materia.turno === 'N') && (splittedDetalhesSala[2][0] === 'N')) {
       return true;
     }
     return false;
   }
 
-  static contaCreditosNoPeriodo(sala, materia) {
+  static contaCreditosNoTurno(sala, materia) {
     const creditosDisponiveis = sala.reduce((total, detalhesSala) => {
       // detalhesSala -> [1-2-M1-1-1]
       if (this.turnoCombina(detalhesSala, materia)) {
@@ -89,8 +89,28 @@ module.exports = class Gene {
   }
 
   static labCombina(detalhesSala, materia) {
-
+    const splittedDetalhesSala = detalhesSala.split('-');
+    if (materia.lab === splittedDetalhesSala[3] && materia.tipoLab === splittedDetalhesSala[4]) {
+      return true;
+    }
+    return false;
   }
+
+  static janelaUtilizada(detalhesSala, cromossomo) {
+    const splittedDetalhesSala = detalhesSala.split('-');
+    const sala = cromossomo.reduce((total, gene) => {
+      if (gene[1].janela === splittedDetalhesSala[2]) {
+        return total + 1;
+      }
+      return total + 0;
+    }, 0);
+    if (sala > 0) {
+      return true;
+    }
+    return false;
+  }
+
+  // Possibilidade de construir função para preferir salas de em sequência
 
   static pegaSalaDeAula(sala, janela, salasDeAula) {
     const salaDeAula = salasDeAula.filter(item =>

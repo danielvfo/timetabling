@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/danielvfo/timetabling#readme",
   "dependencies": {
+    "eslint": "^4.19.1",
     "shuffle-array": "^1.0.1"
   },
   "devDependencies": {

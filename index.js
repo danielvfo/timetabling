@@ -22,6 +22,7 @@ const materia = Gene.pegaMateria(materias);
 console.log(materia);
 const salasDeAula = novoGene.getSalasDeAula();
 const salasDeAulaReduzidas = Gene.reduzirSalasDeAula(salasDeAula);
-const creditos = Object.keys(salasDeAulaReduzidas).map(key =>
-  Gene.contaCreditosNoPeriodo(salasDeAulaReduzidas[key], materia));
-console.log(creditos);
+console.log(salasDeAulaReduzidas);
+/* const creditos = Object.keys(salasDeAulaReduzidas).map(key =>
+  Gene.contaCreditosNoTurno(salasDeAulaReduzidas[key], materia));
+console.log(creditos); */
