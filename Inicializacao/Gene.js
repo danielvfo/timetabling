@@ -61,25 +61,22 @@ module.exports = class Gene {
     const splittedDetalhesSala = detalhesSala.split('-'); // Sala1: [1-2-M1-1-1, 1-2-M2-1-1]
     if ((materia.turno === 'I') && (splittedDetalhesSala[2][0] === 'M')) {
       return true;
-    }
-    if ((materia.turno === 'I') && (splittedDetalhesSala[2][0] === 'T')) {
+    } else if ((materia.turno === 'I') && (splittedDetalhesSala[2][0] === 'T')) {
       return true;
-    }
-    if ((materia.turno === 'M') && (splittedDetalhesSala[2][0] === 'M')) {
+    } else if ((materia.turno === 'M') && (splittedDetalhesSala[2][0] === 'M')) {
       return true;
-    }
-    if ((materia.turno === 'T') && (splittedDetalhesSala[2][0] === 'T')) {
+    } else if ((materia.turno === 'T') && (splittedDetalhesSala[2][0] === 'T')) {
       return true;
-    }
-    if ((materia.turno === 'N') && (splittedDetalhesSala[2][0] === 'N')) {
+    } else if ((materia.turno === 'N') && (splittedDetalhesSala[2][0] === 'N')) {
       return true;
     }
     return false;
   }
 
-  static contaCreditosNoTurno(sala, materia) {
-    const creditosDisponiveis = sala.reduce((total, detalhesSala) => {
-      // detalhesSala -> [1-2-M1-1-1]
+  // Recebe um array com os detalhes de uma sala
+  static contaCreditosNoTurno(salas, materia) {
+    const creditosDisponiveis = salas.reduce((total, detalhesSala) => {
+      // detalhesSala é um elemento de um array, exemplo: [1-2-M1-1-1]
       if (this.turnoCombina(detalhesSala, materia)) {
         return total + 1;
       }
@@ -112,16 +109,65 @@ module.exports = class Gene {
 
   // Possibilidade de construir função para preferir salas de em sequência
 
-  static pegaSalaDeAula(sala, janela, salasDeAula) {
-    const salaDeAula = salasDeAula.filter(item =>
-      item.sala === sala && item.janela === janela);
-    return salaDeAula.pop();
+  // Recebe o objeto de salas reduzidas
+  static pegaSalasDeAula(salas, materia, cromossomo) {
+    let salasEscolhidas = [];
+    let creditos = 0;
+    if (cromossomo.length > 0) {
+      creditos = this.contaCreditosNoTurno(salas, materia);
+      if (creditos >= materia.creditos) {
+        salasEscolhidas = salas.filter(detalhesSala =>
+          this.labCombina(detalhesSala, materia) &&
+          this.turnoCombina(detalhesSala, materia) &&
+          !this.janelaUtilizada(detalhesSala, cromossomo));
+      }
+    } else {
+      creditos = this.contaCreditosNoTurno(salas, materia);
+      if (creditos >= materia.creditos) {
+        salasEscolhidas = salas.filter(detalhesSala =>
+          this.labCombina(detalhesSala, materia) &&
+          this.turnoCombina(detalhesSala, materia));
+      }
+    }
+    return salasEscolhidas;
   }
 
-  // pegaProfessor(creditos, disciplina, professores, DNA) {
-  static pegaProfessor(professores) {
-    const professorEscolhido = professores.filter(professor =>
-      professores.indexOf(professor) === 0);
+  static pegaProfessoresComPreferencia(professores) {
+    const professoresComPreferencia = professores.filter(professor =>
+      professor.materias.length > 0);
+    return professoresComPreferencia;
+  }
+
+  static pegaProfessoresSemPreferencia(professores) {
+    const professoresSemPreferencia = professores.filter(professor =>
+      professor.materias.length === 0);
+    return professoresSemPreferencia;
+  }
+
+  static professorTemCredito(professor, materia) {
+    if (materia.creditos <= professor.creditos) {
+      return true;
+    }
+    return false;
+  }
+
+  static existePreferencia(professor, materia) {
+    const idsCombinados = professor.materias.filter(item => item === materia.id);
+    if (idsCombinados.length > 0) {
+      return true;
+    }
+    return false;
+  }
+
+  static pegaProfessor(professores, materia) {
+    let professorEscolhido;
+    const professoresComPreferencia = this.pegaProfessoresComPreferencia(professores);
+    const professoresSemPreferencia = this.pegaProfessoresSemPreferencia(professores);
+    professorEscolhido = professoresComPreferencia.filter(professor =>
+      this.professorTemCredito(professor, materia) && this.existePreferencia(professor, materia));
+    if (professorEscolhido.length === 0) {
+      professorEscolhido = [professoresSemPreferencia[0]];
+    }
     return professorEscolhido.pop();
   }
 };

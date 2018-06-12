@@ -2,27 +2,31 @@ const Gene = require('./Inicializacao/Gene');
 
 const novoGene = new Gene('./Inputs/');
 
-/* let professores = novoGene.getProfessores();
-console.log(professores);
-const professor = Gene.pegaProfessor(professores);
-console.log('-------------------------------------');
-console.log(professor);
-console.log('-------------------------------------');
-professores = Gene.removerElemento(professores, professor);
-console.log(professores); */
+const todasMaterias = novoGene.getMaterias();
+const materiaEscolhida = Gene.pegaMateria(todasMaterias);
+/* const materiaComplementar = Gene.pegaMateriaComplementar(materiaEscolhida, todasMaterias);
+console.log(materiaEscolhida);
 
-/* const materias = novoGene.getMaterias();
-const materia = Gene.pegaMateria(materias);
-const materiaComplementar = Gene.pegaMateriaComplementar(materia, materias);
-console.log(materia);
-console.log(materiaComplementar); */
-
-const materias = novoGene.getMaterias();
-const materia = Gene.pegaMateria(materias);
-console.log(materia);
 const salasDeAula = novoGene.getSalasDeAula();
 const salasDeAulaReduzidas = Gene.reduzirSalasDeAula(salasDeAula);
-console.log(salasDeAulaReduzidas);
-/* const creditos = Object.keys(salasDeAulaReduzidas).map(key =>
-  Gene.contaCreditosNoTurno(salasDeAulaReduzidas[key], materia));
-console.log(creditos); */
+
+let salasCompativeis =
+  Object.keys(salasDeAulaReduzidas).map(key =>
+    Gene.pegaSalasDeAula(salasDeAulaReduzidas[key], materiaEscolhida, []));
+salasCompativeis = salasCompativeis.filter(detalhesSala => detalhesSala.length > 0);
+console.log(salasCompativeis);
+
+let salasComplementares;
+if (materiaComplementar) {
+  salasComplementares =
+    Object.keys(salasDeAulaReduzidas).map(key =>
+      Gene.pegaSalasDeAula(salasDeAulaReduzidas[key], materiaComplementar, []));
+  salasComplementares = salasComplementares.filter(detalhesSala => detalhesSala.length > 0);
+}
+console.log(materiaComplementar);
+console.log(salasComplementares); */
+
+const professores = novoGene.getProfessores();
+const pp = Gene.pegaProfessor(professores, materiaEscolhida);
+console.log(materiaEscolhida);
+console.log(pp);
