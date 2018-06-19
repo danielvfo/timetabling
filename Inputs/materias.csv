@@ -1,4 +1,4 @@
-﻿id;curso;semestre;materia;descricao;lab;creditos;tipo_lab;turno
+id;curso;semestre;materia;descricao;lab;creditos;tipo_lab;turno
 1;55;1;IF61A;INTRODUÇÃO A ENGENHARIA DE COMPUTAÇÃO;0;2;0;N
 2;55;1;IF61B;ALGORITMOS;0;3;0;N
 3;55;1;IF61C;LOGICA PARA COMPUTAÇÃO;0;2;0;N

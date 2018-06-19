@@ -6,13 +6,13 @@ const PROFESSORES = 'professores';
 const MATERIAS = 'materias';
 
 module.exports = class Gene {
-  constructor(location) {
+  constructor(diretorio) {
     this.salas =
-      FileLoader.readInput(`${location + SALAS}.csv`, SALAS);
+      FileLoader.readInput(`${diretorio + SALAS}.csv`, SALAS);
     this.professores =
-      FileLoader.readInput(`${location + PROFESSORES}.csv`, PROFESSORES);
+      FileLoader.readInput(`${diretorio + PROFESSORES}.csv`, PROFESSORES);
     this.materias =
-      FileLoader.readInput(`${location + MATERIAS}.csv`, MATERIAS);
+      FileLoader.readInput(`${diretorio + MATERIAS}.csv`, MATERIAS);
   }
 
   getSalasDeAula() {
@@ -41,7 +41,7 @@ module.exports = class Gene {
     return materiaComplementar.pop();
   }
 
-  // Retorna um objeto no formato: {Sala1: [1-2-M1-1-1, 1-2-M2-1-1, ...], Sala2: [...]}
+  // Retorna um objeto no formato: {Sala1: [1-2-M1-1-1, 34-2-M2-1-1, ...], Sala2: [...]}
   static reduzirSalasDeAula(salasDeAula) {
     const salasDeAulaReduzidas = salasDeAula.reduce((salas, sala) => {
       if (sala.sala in salas) {
@@ -110,26 +110,26 @@ module.exports = class Gene {
   // Possibilidade de construir função para preferir salas de em sequência
 
   // Recebe o objeto de salas reduzidas
-  static pegaSalasDeAula(salas, materia, cromossomo) {
-    let salasEscolhidas = [];
-    let creditos = 0;
+  static pegaSalasDeAulaCompativeis(salasDeAulaReduzidas, materia, cromossomo) {
+    let salasCompativeis = [];
+    let creditosSala = 0;
     if (cromossomo.length > 0) {
-      creditos = this.contaCreditosNoTurno(salas, materia);
-      if (creditos >= materia.creditos) {
-        salasEscolhidas = salas.filter(detalhesSala =>
+      creditosSala = this.contaCreditosNoTurno(salasDeAulaReduzidas, materia);
+      if (creditosSala >= materia.creditos) {
+        salasCompativeis = salasDeAulaReduzidas.filter(detalhesSala =>
           this.labCombina(detalhesSala, materia) &&
           this.turnoCombina(detalhesSala, materia) &&
           !this.janelaUtilizada(detalhesSala, cromossomo));
       }
     } else {
-      creditos = this.contaCreditosNoTurno(salas, materia);
-      if (creditos >= materia.creditos) {
-        salasEscolhidas = salas.filter(detalhesSala =>
+      creditosSala = this.contaCreditosNoTurno(salasDeAulaReduzidas, materia);
+      if (creditosSala >= materia.creditos) {
+        salasCompativeis = salasDeAulaReduzidas.filter(detalhesSala =>
           this.labCombina(detalhesSala, materia) &&
           this.turnoCombina(detalhesSala, materia));
       }
     }
-    return salasEscolhidas;
+    return salasCompativeis;
   }
 
   static pegaProfessoresComPreferencia(professores) {
