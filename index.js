@@ -7,5 +7,6 @@ const todasSalas = novoGene.getSalasDeAula();
 const todosProfessores = novoGene.getProfessores();
 const novoDNA = new DNA(todasMaterias, todasSalas, todosProfessores);
 
-const trioArray = novoDNA.montaTrio();
-console.log(trioArray);
+const dna = novoDNA.montaDNA();
+console.log(dna);
+console.log(novoDNA.todasMaterias);

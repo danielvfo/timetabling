@@ -22,7 +22,7 @@ module.exports = class DNA {
   }
 
   removeMateria(materia) {
-    const materias = this.todasMaterias.filter(item => item.id !== materia.com);
+    const materias = this.todasMaterias.filter(item => item.id !== materia.id);
     this.todasMaterias = materias;
   }
 
@@ -31,15 +31,26 @@ module.exports = class DNA {
     this.todasSalas = salas;
   }
 
-  removeProfessor() {
+  removeProfessorZero() {
     const professores = this.todosProfessores.filter(item => item.creditos > 0);
     this.todosProfessores = professores;
+  }
+
+  removeProfessor(professor) {
+    const professores = this.todosProfessores.filter(item => item.id !== professor.id);
+    this.todosProfessores = professores;
+  }
+
+  subtraiCreditosProfessor(materia, professor) {
+    const professorTemp = { ...professor };
+    professorTemp.creditos = `${professorTemp.creditos - materia.creditos}`;
+    this.removeProfessor(professor);
+    this.todosProfessores.push(professorTemp);
   }
 
   montaTrio() {
     const trioArray = [];
     const salasDeAulaReduzidas = Gene.reduzirSalasDeAula(this.todasSalas);
-    // Para a matéria
     const trio = {};
     const materiaEscolhida = Gene.pegaMateria(this.todasMaterias);
     let salasCompativeis =
@@ -49,11 +60,12 @@ module.exports = class DNA {
     const salasEscolhidas = this.pegaPrimeirasSalas(salasCompativeis, materiaEscolhida);
     const professorEscolhido = Gene.pegaProfessor(this.todosProfessores, materiaEscolhida);
     trio.materia = materiaEscolhida;
-    trio.sala = salasEscolhidas;
+    trio.salas = salasEscolhidas;
     trio.professor = professorEscolhido;
     trioArray.push(trio);
+    this.subtraiCreditosProfessor(materiaEscolhida, professorEscolhido);
     // Para a matéria complementar
-    const trioComp = {};
+    /* const trioComp = {};
     const materiaComplementar = Gene.pegaMateriaComplementar(materiaEscolhida, this.todasMaterias);
     if (materiaComplementar) {
       let salasComplementares =
@@ -63,15 +75,23 @@ module.exports = class DNA {
       const salasCompEscolhidas = this.pegaPrimeirasSalas(salasComplementares, materiaComplementar);
       const professorComplementar = Gene.pegaProfessor(this.todosProfessores, materiaComplementar);
       trioComp.materia = materiaComplementar;
-      trioComp.sala = salasCompEscolhidas;
+      trioComp.salas = salasCompEscolhidas;
       trioComp.professor = professorComplementar;
       trioArray.push(trioComp);
-    }
+      this.subtraiCreditosProfessor(materiaComplementar, professorComplementar);
+    } */
     return trioArray;
   }
 
-  static montaDNA() {
+  montaDNA() {
     const dna = [];
+    const trioArray = this.montaTrio();
+    trioArray.forEach((trio) => {
+      this.removeMateria(trio.materia);
+      // this.removeSala(trio.salas);
+      this.removeProfessorZero();
+      dna.push(trio);
+    });
     return dna;
   }
 };
