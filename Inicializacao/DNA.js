@@ -48,14 +48,14 @@ module.exports = class DNA {
     this.todosProfessores.push(professorTemp);
   }
 
-  montaTrio() {
+  montaTrio(dna) {
     const trioArray = [];
     const salasDeAulaReduzidas = Gene.reduzirSalasDeAula(this.todasSalas);
     const trio = {};
     const materiaEscolhida = Gene.pegaMateria(this.todasMaterias);
     let salasCompativeis =
     Object.keys(salasDeAulaReduzidas).map(key =>
-      Gene.pegaSalasDeAulaCompativeis(salasDeAulaReduzidas[key], materiaEscolhida, []));
+      Gene.pegaSalasDeAulaCompativeis(salasDeAulaReduzidas[key], materiaEscolhida, dna));
     salasCompativeis = salasCompativeis.filter(detalhesSala => detalhesSala.length > 0);
     const salasEscolhidas = this.pegaPrimeirasSalas(salasCompativeis, materiaEscolhida);
     const professorEscolhido = Gene.pegaProfessor(this.todosProfessores, materiaEscolhida);
@@ -84,14 +84,14 @@ module.exports = class DNA {
   }
 
   montaDNA() {
-    const dna = [];
-    const trioArray = this.montaTrio();
-    trioArray.forEach((trio) => {
-      this.removeMateria(trio.materia);
-      // this.removeSala(trio.salas);
-      this.removeProfessorZero();
-      dna.push(trio);
-    });
-    return dna;
+    while (this.todasMaterias.length > 0) {
+      const trioArray = this.montaTrio(this.dna);
+      trioArray.forEach((trio) => {
+        this.removeMateria(trio.materia);
+        this.removeSala(trio.salas);
+        this.removeProfessorZero();
+        this.dna.push(trio);
+      });
+    }
   }
 };

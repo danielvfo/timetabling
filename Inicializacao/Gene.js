@@ -93,15 +93,24 @@ module.exports = class Gene {
     return false;
   }
 
-  static janelaUtilizada(detalhesSala, cromossomo) {
+  static janelaUtilizada(detalhesSala, dna) {
     const splittedDetalhesSala = detalhesSala.split('-');
-    const sala = cromossomo.reduce((total, gene) => {
+    let contador = 0;
+    dna.forEach((element) => {
+      contador = element.salas.reduce((total, sala) => {
+        if (sala.janela === splittedDetalhesSala[2]) {
+          return total + 1;
+        }
+        return total + 0;
+      }, 0);
+    });
+    /* const sala = dna.reduce((total, gene) => {
       if (gene[1].janela === splittedDetalhesSala[2]) {
         return total + 1;
       }
       return total + 0;
-    }, 0);
-    if (sala > 0) {
+    }, 0); */
+    if (contador > 0) {
       return true;
     }
     return false;
@@ -110,16 +119,16 @@ module.exports = class Gene {
   // Possibilidade de construir função para preferir salas de em sequência
 
   // Recebe o objeto de salas reduzidas
-  static pegaSalasDeAulaCompativeis(salasDeAulaReduzidas, materia, cromossomo) {
+  static pegaSalasDeAulaCompativeis(salasDeAulaReduzidas, materia, dna) {
     let salasCompativeis = [];
     let creditosSala = 0;
-    if (cromossomo.length > 0) {
+    if (dna.length > 0) {
       creditosSala = this.contaCreditosNoTurno(salasDeAulaReduzidas, materia);
       if (creditosSala >= materia.creditos) {
         salasCompativeis = salasDeAulaReduzidas.filter(detalhesSala =>
           this.labCombina(detalhesSala, materia) &&
           this.turnoCombina(detalhesSala, materia) &&
-          !this.janelaUtilizada(detalhesSala, cromossomo));
+          !this.janelaUtilizada(detalhesSala, dna));
       }
     } else {
       creditosSala = this.contaCreditosNoTurno(salasDeAulaReduzidas, materia);
